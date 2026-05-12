@@ -10,7 +10,7 @@ export default function Hero() {
   return (
     <div>
       <>
-        <div className="min-h-screen pb-20">
+        <div className="min-h-screen pb-10">
           {/* Navbar */}
           <nav className="z-50 flex items-center justify-between w-full py-4 px-6 md:px-16 lg:px-24 xl:px-40 text-sm">
             <a href="/">
@@ -38,13 +38,13 @@ export default function Hero() {
             </div>
 
             <div className="flex gap-2">
-              <Link
+              {/* <Link
                 to="/app?state=register"
                 className="hidden md:block px-6 py-2 bg-green-700 hover:bg-green-700 active:scale-95 transition-all rounded-full text-white"
                 hidden={user}
               >
                 Get started
-              </Link>
+              </Link> */}
               <Link
                 to={"/app?state=login"}
                 className="hidden md:block px-6 py-2 border active:scale-95 hover:bg-slate-50 transition-all rounded-full text-slate-700 hover:text-slate-900"
