@@ -31,3 +31,5 @@ app.use("/api/ai", aiRouter);
 
 app.use("/api/upload", uploadRoutes);
 app.use("/api/jobs", jobRoutes);
+
+export default app;
