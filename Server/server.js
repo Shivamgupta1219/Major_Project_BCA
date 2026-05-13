@@ -12,7 +12,12 @@ configDotenv.config();
 const app = express();
 // const PORT = process.env.PORT || 3000;
 // data base connection
-await connectDB();
+try {
+   await connectDB();
+   console.log("Database connected");
+} catch (error) {
+   console.log("DB Error:", error.message);
+}
 
 // routes
 app.use(express.json());
