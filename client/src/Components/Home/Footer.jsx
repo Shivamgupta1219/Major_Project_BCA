@@ -1,149 +1,100 @@
-import React from "react";
-import { Linkedin, Github, Twitter, Mail } from "lucide-react";
+import { Sparkles, Linkedin, Github, Twitter, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
 
-function Footer() {
+const QUICK_LINKS = [
+  { href: "/",            label: "Home" },
+  { href: "#features",    label: "Features" },
+  { href: "#testimonials",label: "Reviews" },
+  { href: "#cta",         label: "Get Started" },
+];
+
+const RESOURCES = [
+  { href: "/", label: "Resume Tips" },
+  { href: "/", label: "Career Guide" },
+  { href: "/", label: "Interview Prep" },
+  { href: "/", label: "FAQs" },
+];
+
+const SOCIALS = [
+  { Icon: Linkedin, href: "#" },
+  { Icon: Github,   href: "#" },
+  { Icon: Twitter,  href: "#" },
+  { Icon: Mail,     href: "#" },
+];
+
+export default function Footer() {
   return (
-    <footer className="bg-gradient-to-b from-[#0f172a] to-black text-gray-300 mt-32 border-t border-gray-800">
-      
-      {/* Main Footer */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-        
-        {/* Logo & About */}
+    <footer className="bg-slate-950 text-gray-400 border-t border-white/5">
+      <div className="max-w-6xl mx-auto px-6 md:px-12 py-16 grid grid-cols-1 md:grid-cols-3 gap-10">
+        {/* Brand */}
         <div>
-          <h1 className="text-3xl font-bold text-white">
-            Resume<span className="text-green-500">AI</span>
-          </h1>
-
-          <p className="mt-5 text-sm leading-6 text-gray-400">
-            Build professional resumes instantly using AI-powered tools.
-            Create modern, ATS-friendly resumes that help you stand out.
+          <Link to="/" className="flex items-center gap-2 mb-4">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-white" />
+            </div>
+            <span className="text-xl font-bold text-white tracking-tight">
+              Campus<span className="text-indigo-400">CV</span>
+            </span>
+          </Link>
+          <p className="text-sm leading-6 text-slate-500 max-w-xs">
+            AI-powered resume builder for students — create ATS-friendly resumes
+            that help you land internships and dream jobs.
           </p>
-
-          {/* Social Icons */}
-          <div className="flex items-center gap-4 mt-6">
-            <a
-              href="#"
-              className="p-2 rounded-full bg-gray-800 hover:bg-green-500 transition duration-300"
-            >
-              <Linkedin size={18} />
-            </a>
-
-            <a
-              href="#"
-              className="p-2 rounded-full bg-gray-800 hover:bg-green-500 transition duration-300"
-            >
-              <Github size={18} />
-            </a>
-
-            <a
-              href="#"
-              className="p-2 rounded-full bg-gray-800 hover:bg-green-500 transition duration-300"
-            >
-              <Twitter size={18} />
-            </a>
-
-            <a
-              href="#"
-              className="p-2 rounded-full bg-gray-800 hover:bg-green-500 transition duration-300"
-            >
-              <Mail size={18} />
-            </a>
+          <div className="flex items-center gap-3 mt-6">
+            {SOCIALS.map(({ Icon, href }) => (
+              <a
+                key={href + Icon.name}
+                href={href}
+                className="p-2 rounded-full bg-white/5 hover:bg-indigo-600 text-slate-400 hover:text-white transition-colors duration-200"
+              >
+                <Icon size={16} />
+              </a>
+            ))}
           </div>
         </div>
 
         {/* Quick Links */}
         <div>
-          <h2 className="text-lg font-semibold text-white mb-5">
+          <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-5">
             Quick Links
-          </h2>
-
+          </h3>
           <ul className="space-y-3 text-sm">
-            <li>
-              <a href="/" className="hover:text-green-400 transition">
-                Home
-              </a>
-            </li>
-
-            <li>
-              <a href="#features" className="hover:text-green-400 transition">
-                Features
-              </a>
-            </li>
-
-            <li>
-              <a
-                href="#templates"
-                className="hover:text-green-400 transition"
-              >
-                Templates
-              </a>
-            </li>
-
-            <li>
-              <a href="#contact" className="hover:text-green-400 transition">
-                Contact
-              </a>
-            </li>
+            {QUICK_LINKS.map((l) => (
+              <li key={l.label}>
+                <a href={l.href} className="hover:text-indigo-400 transition-colors">
+                  {l.label}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
 
         {/* Resources */}
         <div>
-          <h2 className="text-lg font-semibold text-white mb-5">
+          <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-5">
             Resources
-          </h2>
-
+          </h3>
           <ul className="space-y-3 text-sm">
-            <li>
-              <a href="/" className="hover:text-green-400 transition">
-                Resume Tips
-              </a>
-            </li>
-
-            <li>
-              <a href="/" className="hover:text-green-400 transition">
-                Career Guide
-              </a>
-            </li>
-
-            <li>
-              <a href="/" className="hover:text-green-400 transition">
-                Interview Prep
-              </a>
-            </li>
-
-            <li>
-              <a href="/" className="hover:text-green-400 transition">
-                FAQs
-              </a>
-            </li>
+            {RESOURCES.map((l) => (
+              <li key={l.label}>
+                <a href={l.href} className="hover:text-indigo-400 transition-colors">
+                  {l.label}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
-
-     
       </div>
 
-      {/* Bottom Footer */}
-      <div className="border-t border-gray-800">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
-          
-          <p>
-            © 2026 ResumeAI. All rights reserved.
-          </p>
-
-          <div className="flex items-center gap-6">
-            <a href="/" className="hover:text-green-400 transition">
-              Privacy Policy
-            </a>
-
-            <a href="/" className="hover:text-green-400 transition">
-              Terms & Conditions
-            </a>
+      <div className="border-t border-white/5">
+        <div className="max-w-6xl mx-auto px-6 md:px-12 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-600">
+          <p>© 2026 CampusCV. All rights reserved.</p>
+          <div className="flex gap-6">
+            <a href="/" className="hover:text-indigo-400 transition-colors">Privacy Policy</a>
+            <a href="/" className="hover:text-indigo-400 transition-colors">Terms of Service</a>
           </div>
         </div>
       </div>
     </footer>
   );
 }
-
-export default Footer;

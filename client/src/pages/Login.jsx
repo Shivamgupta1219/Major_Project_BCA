@@ -29,9 +29,9 @@ function Login() {
       dispatch(loginAction(data));
       localStorage.setItem("token", data.token);
       toast.success(data.message);
+      navigate("/app");
     } catch (e) {
-      console.log(e);
-      toast(e?.response?.data?.message || e.message);
+      toast.error(e?.response?.data?.message || e.message);
     }
   };
 

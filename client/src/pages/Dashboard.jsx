@@ -74,24 +74,34 @@ export default function Dashboard() {
     }
   };
 
-  const uploadResume = async (file) => {
-    setIsLoading(true);
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const res = await fetch("http://localhost:5000/api/upload/resume", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await res.json();
-    console.log(data.text);
-  };
-
   const uploadResumeHandler = async (e) => {
     e.preventDefault();
-    if (!resume) return toast.error("Select file");
-    await uploadResume(resume);
+    if (!resume) return toast.error("Please select a PDF file");
+    if (!title.trim()) return toast.error("Please enter a resume title");
+
+    setIsLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", resume);
+      const { data: uploadData } = await api.post("/api/upload/resume", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      const { data: aiData } = await api.post("/api/ai/upload-resume", {
+        resumeText: uploadData.text,
+        title: title.trim(),
+      });
+
+      toast.success("Resume imported successfully!");
+      setShowUploadResume(false);
+      setTitle("");
+      setResume(null);
+      navigate(`/app/builder/${aiData.resumeId}`);
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Failed to import resume");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {

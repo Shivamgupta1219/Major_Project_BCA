@@ -12,6 +12,9 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import CareerPath from "./Components/CareerPath";
 import Jobs from "./Components/Jobs";
+import ProfilePage from "./pages/ProfilePage";
+import MyResumesPage from "./pages/MyResumesPage";
+import SettingsPage from "./pages/SettingsPage";
 import api from "./configs/api";
 import { login, setLoading } from "./app/Feautes/authSlice";
 export default function App() {
@@ -81,7 +84,10 @@ export default function App() {
           <Route index element={<Dashboard />} />
           <Route path="builder/:resumeId" element={<ResumeBuilder />} />
            <Route path="career-path" element={<CareerPath />} />
-        <Route path="jobs" element={<Jobs />} />
+          <Route path="jobs" element={<Jobs />} />
+          <Route path="profile" element={<ProfilePage />} />
+          <Route path="resumes" element={<MyResumesPage />} />
+          <Route path="settings" element={<SettingsPage />} />
         </Route>
 
        

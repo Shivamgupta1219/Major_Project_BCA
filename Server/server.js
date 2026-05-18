@@ -7,10 +7,12 @@ import resumeRouter from "./routes/resumeRoutes.js";
 import aiRouter from "./routes/aiRoutes.js";
 import uploadRoutes from "./routes/uploadRoute.js";
 import jobRoutes from "./routes/jobRoutes.js";
+import atsRouter from "./routes/atsRoute.js";
+import notificationRouter from "./routes/notificationRoutes.js";
 
 configDotenv.config();
 const app = express();
-// const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 // data base connection
 try {
    await connectDB();
@@ -31,5 +33,9 @@ app.use("/api/ai", aiRouter);
 
 app.use("/api/upload", uploadRoutes);
 app.use("/api/jobs", jobRoutes);
+app.use("/api/ats", atsRouter);
+app.use("/api/notifications", notificationRouter);
 
-export default app;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"D:\\\\Ai Resume Builder [Minor proeject ]\" -Force)",
+      "Bash(Select-Object Name, Mode)",
+      "Bash(Format-Table -AutoSize)",
+      "Bash(npm run *)",
+      "Bash(timeout 10 node index.js)"
+    ]
+  }
+}
