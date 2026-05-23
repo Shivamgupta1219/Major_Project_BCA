@@ -69,6 +69,29 @@ const resumeSchema = new mongoose.Schema(
     credential_url: { type: String, default: "" },
   },
 ],
+
+    resumeScore: {
+      overall: { type: Number, default: 0, index: true },
+      ats: { type: Number, default: 0 },
+      keywords: { type: Number, default: 0 },
+      grammar: { type: Number, default: 0 },
+      projects: { type: Number, default: 0 },
+      skills: { type: Number, default: 0 },
+      formatting: { type: Number, default: 0 },
+      suggestions: { type: [String], default: [] },
+      targetRole: { type: String, default: "" },
+      computedAt: { type: Date, default: null },
+    },
+
+    // Review status
+    reviewStatus: {
+      type: String,
+      enum: ["draft", "submitted", "under_review", "needs_improvement", "approved", "placement_ready"],
+      default: "draft",
+      index: true,
+    },
+    submittedAt: { type: Date, default: null },
+    isPlacementReady: { type: Boolean, default: false },
   },
   
   { timestamps: true, minimize: false }

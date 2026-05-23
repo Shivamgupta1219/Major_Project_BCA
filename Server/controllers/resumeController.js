@@ -2,6 +2,7 @@
 import { response } from "express";
 import Resume from "../models/Resume.js";
 import { createNotification } from "./notificationController.js";
+import { scoreResume } from "../Services/scoringService.js";
 // import fs from 'fs;
 // /controllers for creating new resume
 //  post : /api/resume/create
@@ -227,6 +228,12 @@ export const updateResume = async (req, res) => {
     // ---------------------------
     // ✅ UPDATE
     // ---------------------------
+    const existing = resumeData;
+    resumeData.resumeScore = scoreResume(
+      existing,
+      existing.resumeScore?.targetRole || ""
+    );
+
     const resume = await Resume.findOneAndUpdate(
       { _id: resumeId, userId: req.userId },
       { $set: resumeData },
@@ -265,6 +272,28 @@ export const getUserResumes = async (req, res) => {
     res.status(200).json({ resumes });
   } catch (err) {
     res.status(500).json({ message: "Error loading resumes" });
+  }
+};
+
+// POST /api/resume/:resumeId/score  body: { targetRole? }
+export const computeResumeScore = async (req, res) => {
+  try {
+    const { resumeId } = req.params;
+    const { targetRole = "" } = req.body || {};
+
+    const resume = await Resume.findOne({
+      _id: resumeId,
+      userId: req.userId,
+    });
+    if (!resume) return res.status(404).json({ message: "Resume not found" });
+
+    const score = scoreResume(resume.toObject(), targetRole);
+    resume.resumeScore = score;
+    await resume.save();
+
+    return res.status(200).json({ score });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 };
 

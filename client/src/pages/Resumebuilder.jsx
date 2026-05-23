@@ -5,6 +5,7 @@ import PersonalInfoForm from "../Components/PersonalInfoForm";
 import ResumePreview from "../Components/ResumePreview";
 import TemplateSelector from "../Components/template/TemplateSelector";
 import ATSScoreMeter from "../Components/template/ATSScoreMeter";
+import ResumeScoreCard from "../Components/ResumeScoreCard";
 import ZoomControls from "../Components/Features/ZoomControls";
 import DownloadPdfButton from "../Components/Features/DownloadPdfButton";
 import { ArrowLeftIcon, ChevronLeft, ChevronRight, Save, CheckCircle } from "lucide-react";
@@ -330,6 +331,14 @@ export default function ResumeBuilder() {
                 targetRef={printRef}
                 isSaved={isSaved}
                 resumeTitle={resumeData.title || "Resume"}
+              />
+            </div>
+
+            {/* Multi-category Resume Score */}
+            <div className="mb-4">
+              <ResumeScoreCard
+                resumeId={resumeData._id}
+                initialScore={resumeData.resumeScore}
               />
             </div>
 

@@ -150,6 +150,13 @@ function Navbar() {
             <FileText className="w-4 h-4" />
             Career Path
           </Link>
+          <Link
+            to="/app/placement-drives"
+            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-slate-700 hover:bg-white hover:text-indigo-600 hover:shadow-sm transition-all duration-200"
+          >
+            <Briefcase className="w-4 h-4" />
+            Drives
+          </Link>
         </div>
 
         {/* User Section */}

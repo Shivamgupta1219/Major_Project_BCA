@@ -4,14 +4,14 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import Resume from "../models/Resume.js";
 
-const generateToken = (userId) => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
+const generateToken = (userId, role, collegeId) => {
+  return jwt.sign({ userId, role, collegeId }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
 // POST : /api/users/register
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role, department, year, rollNo, collegeId } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
@@ -24,15 +24,26 @@ export const registerUser = async (req, res) => {
         .json({ message: "User already exists. Please login." });
     }
 
+    // Only allow self-registration as student.
+    // super_admin must be created separately via super admin panel.
+    // admin must be created via admin setup URL
+    // Faculty must be created by an admin.
+    const safeRole = "student"; // Always enforce student role for self-registration
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({
       name,
       email,
       password: hashedPassword,
+      role: safeRole,
+      collegeId: collegeId || null, // Admin can provide collegeId during registration
+      department: department || "",
+      year: year || "",
+      rollNo: rollNo || "",
     });
 
-    const token = generateToken(newUser._id);
+    const token = generateToken(newUser._id, newUser.role, newUser.collegeId);
 
     newUser.password = undefined;
 
@@ -69,7 +80,7 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const token = generateToken(user._id);
+    const token = generateToken(user._id, user.role, user.collegeId);
     user.password = undefined;
 
     return res.status(200).json({
@@ -155,8 +166,8 @@ export const changePassword = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    if (newPassword.length < 6) {
-      return res.status(400).json({ message: "New password must be at least 6 characters" });
+    if (newPassword.length < 8) {
+      return res.status(400).json({ message: "New password must be at least 8 characters" });
     }
 
     const user = await User.findById(req.userId);

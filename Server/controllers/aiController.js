@@ -264,3 +264,231 @@ ${userProfile}
     });
   }
 };
+
+// Cover Letter Generator
+// POST: /api/ai/generate-cover-letter
+export const generateCoverLetter = async (req, res) => {
+  try {
+    const { jobTitle, companyName, resumeSummary, skills } = req.body;
+
+    if (!jobTitle || !companyName || !resumeSummary) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    const skillsText = Array.isArray(skills) ? skills.join(", ") : skills;
+
+    const prompt = `
+You are an expert cover letter writer.
+
+Generate a professional cover letter for the following:
+- Job Title: ${jobTitle}
+- Company: ${companyName}
+- My Resume Summary: ${resumeSummary}
+- My Skills: ${skillsText}
+
+Rules:
+- Keep it to 3-4 paragraphs
+- Professional and engaging tone
+- Highlight relevant skills and achievements
+- Include a call to action
+- Make it ATS-friendly
+- Do NOT add formatting with * or # symbols
+- Return ONLY the cover letter text
+`;
+
+    const response = await ai.chat.completions.create({
+      model: process.env.OPENAI_MODEL,
+      messages: [
+        {
+          role: "system",
+          content: "You are an expert cover letter writer.",
+        },
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+    });
+
+    const coverLetter = response.choices[0].message.content.trim();
+    return res.status(200).json({ coverLetter });
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
+  }
+};
+
+// LinkedIn Profile Optimizer
+// POST: /api/ai/optimize-linkedin
+export const optimizeLinkedInProfile = async (req, res) => {
+  try {
+    const { headline, summary, skills, experience } = req.body;
+
+    if (!summary) {
+      return res.status(400).json({ message: "Summary is required" });
+    }
+
+    const prompt = `
+You are a LinkedIn optimization expert.
+
+Help optimize this LinkedIn profile:
+- Current Headline: ${headline || "Not provided"}
+- Summary: ${summary}
+- Skills: ${skills ? skills.join(", ") : "Not provided"}
+- Experience: ${experience || "Not provided"}
+
+Provide suggestions in JSON format:
+{
+  "optimized_headline": "...",
+  "optimized_summary": "...",
+  "suggested_skills": [...],
+  "tips": [...]
+}
+
+Rules:
+- Keep it professional and engaging
+- Make it keyword-rich for recruiters
+- Be concise but impactful
+- Focus on achievements and impact
+`;
+
+    const response = await ai.chat.completions.create({
+      model: process.env.OPENAI_MODEL,
+      messages: [
+        {
+          role: "system",
+          content: "You are a LinkedIn optimization expert.",
+        },
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      response_format: { type: "json_object" },
+    });
+
+    const suggestions = JSON.parse(response.choices[0].message.content);
+    return res.status(200).json(suggestions);
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
+  }
+};
+
+// Mock Interview Questions Generator
+// POST: /api/ai/generate-interview-questions
+export const generateInterviewQuestions = async (req, res) => {
+  try {
+    const { jobTitle, skills, experience, difficulty = "intermediate" } = req.body;
+
+    if (!jobTitle || !skills) {
+      return res.status(400).json({ message: "Job title and skills are required" });
+    }
+
+    const skillsText = Array.isArray(skills) ? skills.join(", ") : skills;
+
+    const prompt = `
+You are an expert interview coach.
+
+Generate mock interview questions for:
+- Job Title: ${jobTitle}
+- Key Skills: ${skillsText}
+- Experience Level: ${difficulty}
+
+Provide questions in JSON format:
+{
+  "technical_questions": [...],
+  "behavioral_questions": [...],
+  "questions_to_ask_interviewer": [...],
+  "tips": [...]
+}
+
+Rules:
+- Generate 5 questions per category
+- Make them realistic and relevant
+- Include follow-up hints
+- Provide tips for answering well
+- ${difficulty === "junior" ? "Focus on basics and learning attitude" : difficulty === "intermediate" ? "Balance theory and practical experience" : "Focus on advanced concepts and problem-solving"}
+`;
+
+    const response = await ai.chat.completions.create({
+      model: process.env.OPENAI_MODEL,
+      messages: [
+        {
+          role: "system",
+          content: "You are an expert interview coach.",
+        },
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      response_format: { type: "json_object" },
+    });
+
+    const questions = JSON.parse(response.choices[0].message.content);
+    return res.status(200).json(questions);
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
+  }
+};
+
+// Job Description Matcher
+// POST: /api/ai/match-job-description
+export const matchJobDescription = async (req, res) => {
+  try {
+    const { jobDescription, resumeContent } = req.body;
+
+    if (!jobDescription || !resumeContent) {
+      return res.status(400).json({ message: "Job description and resume content are required" });
+    }
+
+    const prompt = `
+You are an expert resume matcher and career advisor.
+
+Analyze how well this resume matches the job description:
+
+JOB DESCRIPTION:
+${jobDescription}
+
+RESUME CONTENT:
+${resumeContent}
+
+Provide analysis in JSON format:
+{
+  "overall_match_percentage": 0-100,
+  "matched_skills": [...],
+  "missing_skills": [...],
+  "strength_areas": [...],
+  "improvement_areas": [...],
+  "recommendations": [...],
+  "motivation_text": "..."
+}
+
+Rules:
+- Be honest but constructive
+- Focus on key requirements
+- Identify transferable skills
+- Provide actionable recommendations
+- Be encouraging but realistic
+`;
+
+    const response = await ai.chat.completions.create({
+      model: process.env.OPENAI_MODEL,
+      messages: [
+        {
+          role: "system",
+          content: "You are an expert resume matcher and career advisor.",
+        },
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      response_format: { type: "json_object" },
+    });
+
+    const analysis = JSON.parse(response.choices[0].message.content);
+    return res.status(200).json(analysis);
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
+  }
+};

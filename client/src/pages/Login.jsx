@@ -18,6 +18,10 @@ function Login() {
     name: "",
     email: "",
     password: "",
+    role: "student",
+    department: "",
+    year: "",
+    rollNo: "",
   });
 
   const dispatch = useDispatch();
@@ -29,7 +33,11 @@ function Login() {
       dispatch(loginAction(data));
       localStorage.setItem("token", data.token);
       toast.success(data.message);
-      navigate("/app");
+      const role = data?.user?.role;
+      if (role === "super_admin") navigate("/super-admin");
+      else if (role === "admin") navigate("/admin");
+      else if (role === "faculty") navigate("/faculty");
+      else navigate("/app");
     } catch (e) {
       toast.error(e?.response?.data?.message || e.message);
     }
@@ -93,6 +101,71 @@ function Login() {
               required
             />
           </div>
+        )}
+
+        {/* Role + extra fields for registration */}
+        {state !== "login" && (
+          <>
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData((p) => ({ ...p, role: "student" }))
+                }
+                className={`h-10 rounded-full text-sm font-medium transition-colors ${
+                  formData.role === "student"
+                    ? "bg-green-600 text-white"
+                    : "bg-gray-800/70 text-gray-300 border border-gray-700"
+                }`}
+              >
+                Student
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData((p) => ({ ...p, role: "admin" }))
+                }
+                className={`h-10 rounded-full text-sm font-medium transition-colors ${
+                  formData.role === "admin"
+                    ? "bg-green-600 text-white"
+                    : "bg-gray-800/70 text-gray-300 border border-gray-700"
+                }`}
+              >
+                College Admin
+              </button>
+            </div>
+
+            {formData.role === "student" && (
+              <>
+                <input
+                  type="text"
+                  name="department"
+                  placeholder="Department (e.g., BCA)"
+                  value={formData.department}
+                  onChange={handleChange}
+                  className="bg-gray-800/70 border border-gray-700 w-full h-12 rounded-full pl-6 pr-4 mt-3 text-gray-200 placeholder-gray-500 outline-none"
+                />
+                <div className="grid grid-cols-2 gap-2 mt-3">
+                  <input
+                    type="text"
+                    name="year"
+                    placeholder="Year"
+                    value={formData.year}
+                    onChange={handleChange}
+                    className="bg-gray-800/70 border border-gray-700 h-12 rounded-full pl-6 pr-4 text-gray-200 placeholder-gray-500 outline-none"
+                  />
+                  <input
+                    type="text"
+                    name="rollNo"
+                    placeholder="Roll No"
+                    value={formData.rollNo}
+                    onChange={handleChange}
+                    className="bg-gray-800/70 border border-gray-700 h-12 rounded-full pl-6 pr-4 text-gray-200 placeholder-gray-500 outline-none"
+                  />
+                </div>
+              </>
+            )}
+          </>
         )}
 
         {/* Email */}

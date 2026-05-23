@@ -9,17 +9,26 @@ import uploadRoutes from "./routes/uploadRoute.js";
 import jobRoutes from "./routes/jobRoutes.js";
 import atsRouter from "./routes/atsRoute.js";
 import notificationRouter from "./routes/notificationRoutes.js";
+import adminRouter from "./routes/adminRoutes.js";
+import superAdminRouter from "./routes/superAdminRoutes.js";
+import facultyRouter from "./routes/facultyRoutes.js";
+import subscriptionRouter from "./routes/subscriptionRoutes.js";
+import placementDriveRouter from "./routes/placementDriveRoutes.js";
 
 configDotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
-// data base connection
-try {
-   await connectDB();
-   console.log("Database connected");
-} catch (error) {
-   console.log("DB Error:", error.message);
-}
+
+// Initialize database
+(async () => {
+  try {
+    await connectDB();
+    console.log("Database connected");
+  } catch (error) {
+    console.log("DB Error:", error.message);
+    process.exit(1);
+  }
+})();
 
 // routes
 app.use(express.json());
@@ -35,6 +44,11 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/ats", atsRouter);
 app.use("/api/notifications", notificationRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/super-admin", superAdminRouter);
+app.use("/api/faculty", facultyRouter);
+app.use("/api/subscription", subscriptionRouter);
+app.use("/api/placement-drives", placementDriveRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
