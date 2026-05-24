@@ -19,17 +19,6 @@ configDotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Initialize database
-(async () => {
-  try {
-    await connectDB();
-    console.log("Database connected");
-  } catch (error) {
-    console.log("DB Error:", error.message);
-    process.exit(1);
-  }
-})();
-
 // routes
 app.use(express.json());
 app.use(cors());
@@ -50,6 +39,17 @@ app.use("/api/faculty", facultyRouter);
 app.use("/api/subscription", subscriptionRouter);
 app.use("/api/placement-drives", placementDriveRouter);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// Initialize database and start server
+(async () => {
+  try {
+    await connectDB();
+    console.log("✅ Database connected");
+
+    app.listen(PORT, () => {
+      console.log(`🚀 Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("❌ Failed to start server:", error.message);
+    process.exit(1);
+  }
+})();
