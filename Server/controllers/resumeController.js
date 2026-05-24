@@ -1,6 +1,8 @@
 // import imageKit from "../configs/imageKit.js";
 import { response } from "express";
 import Resume from "../models/Resume.js";
+import { createNotification } from "./notificationController.js";
+import { scoreResume } from "../Services/scoringService.js";
 // import fs from 'fs;
 // /controllers for creating new resume
 //  post : /api/resume/create
@@ -14,6 +16,14 @@ export const createResume = async (req, res) => {
       userId,
       title,
     });
+
+    await createNotification(
+      userId,
+      "resume_created",
+      "Resume Created",
+      `Your new resume "${title}" has been created successfully.`,
+      `/app/builder/${resume._id}`
+    );
 
     return res.status(201).json({
       message: "Resume created successfully",
@@ -206,11 +216,24 @@ export const updateResume = async (req, res) => {
 
     resumeData.skills = ensureArray(resumeData.skills);
 
-    resumeData.certifications = ensureArray(resumeData.certifications);
+    resumeData.certifications = ensureArray(resumeData.certifications).map((c) => ({
+      name: c?.name || "",
+      issuer: c?.issuer || "",
+      issue_date: c?.issue_date || "",
+      expiry_date: c?.expiry_date || "",
+      credential_id: c?.credential_id || "",
+      credential_url: c?.credential_url || "",
+    }));
 
     // ---------------------------
     // ✅ UPDATE
     // ---------------------------
+    const existing = resumeData;
+    resumeData.resumeScore = scoreResume(
+      existing,
+      existing.resumeScore?.targetRole || ""
+    );
+
     const resume = await Resume.findOneAndUpdate(
       { _id: resumeId, userId: req.userId },
       { $set: resumeData },
@@ -220,6 +243,14 @@ export const updateResume = async (req, res) => {
     if (!resume) {
       return res.status(404).json({ message: "Resume not found" });
     }
+
+    await createNotification(
+      req.userId,
+      "resume_updated",
+      "Resume Updated",
+      `Your resume "${resume.title}" has been updated successfully.`,
+      `/app/builder/${resumeId}`
+    );
 
     return res.status(200).json({
       message: "Resume updated successfully",
@@ -241,6 +272,28 @@ export const getUserResumes = async (req, res) => {
     res.status(200).json({ resumes });
   } catch (err) {
     res.status(500).json({ message: "Error loading resumes" });
+  }
+};
+
+// POST /api/resume/:resumeId/score  body: { targetRole? }
+export const computeResumeScore = async (req, res) => {
+  try {
+    const { resumeId } = req.params;
+    const { targetRole = "" } = req.body || {};
+
+    const resume = await Resume.findOne({
+      _id: resumeId,
+      userId: req.userId,
+    });
+    if (!resume) return res.status(404).json({ message: "Resume not found" });
+
+    const score = scoreResume(resume.toObject(), targetRole);
+    resume.resumeScore = score;
+    await resume.save();
+
+    return res.status(200).json({ score });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 };
 

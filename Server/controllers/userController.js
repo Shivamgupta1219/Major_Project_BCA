@@ -4,14 +4,14 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import Resume from "../models/Resume.js";
 
-const generateToken = (userId) => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
+const generateToken = (userId, role, collegeId) => {
+  return jwt.sign({ userId, role, collegeId }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
 // POST : /api/users/register
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role, department, year, rollNo, collegeId } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
@@ -24,15 +24,26 @@ export const registerUser = async (req, res) => {
         .json({ message: "User already exists. Please login." });
     }
 
+    // Only allow self-registration as student.
+    // super_admin must be created separately via super admin panel.
+    // admin must be created via admin setup URL
+    // Faculty must be created by an admin.
+    const safeRole = "student"; // Always enforce student role for self-registration
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({
       name,
       email,
       password: hashedPassword,
+      role: safeRole,
+      collegeId: collegeId || null, // Admin can provide collegeId during registration
+      department: department || "",
+      year: year || "",
+      rollNo: rollNo || "",
     });
 
-    const token = generateToken(newUser._id);
+    const token = generateToken(newUser._id, newUser.role, newUser.collegeId);
 
     newUser.password = undefined;
 
@@ -69,7 +80,7 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const token = generateToken(user._id);
+    const token = generateToken(user._id, user.role, user.collegeId);
     user.password = undefined;
 
     return res.status(200).json({
@@ -120,5 +131,58 @@ export const getUsersResumes = async (req, res) => {
     return res.status(200).json({ resumes });
   } catch (e) {
     res.status(500).json({ message: e.message });
+  }
+};
+
+// PUT : /api/users/update
+export const updateUser = async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    if (!name || !name.trim()) {
+      return res.status(400).json({ message: "Name is required" });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.userId,
+      { name: name.trim() },
+      { new: true, select: "-password" }
+    );
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    return res.status(200).json({ message: "Profile updated", user });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// PUT : /api/users/change-password
+export const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    if (newPassword.length < 8) {
+      return res.status(400).json({ message: "New password must be at least 8 characters" });
+    }
+
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Current password is incorrect" });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    return res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };

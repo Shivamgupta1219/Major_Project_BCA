@@ -1,145 +1,146 @@
-import React from "react";
-import Title from "./Title";
+import {
+  Sparkles,
+  Target,
+  FileText,
+  Upload,
+  Download,
+  Briefcase,
+  CheckCircle,
+} from "lucide-react";
+
+const FEATURES = [
+  {
+    icon: Sparkles,
+    color: "indigo",
+    title: "AI Writing Assistant",
+    description:
+      "Generate compelling bullet points, summaries, and job descriptions tailored to your target role — in seconds.",
+  },
+  {
+    icon: Target,
+    color: "purple",
+    title: "Real-Time ATS Score",
+    description:
+      "See exactly how your resume scores against ATS filters before you apply, with actionable tips to improve.",
+  },
+  {
+    icon: FileText,
+    color: "cyan",
+    title: "6 ATS-Friendly Templates",
+    description:
+      "Choose from Classic, Modern, Minimal, ATS Clean, and ATS Executive templates — all optimised for keyword parsing.",
+  },
+  {
+    icon: Upload,
+    color: "violet",
+    title: "Import Existing Resume",
+    description:
+      "Upload a PDF and our AI extracts your data automatically, so you never start from scratch.",
+  },
+  {
+    icon: Download,
+    color: "sky",
+    title: "One-Click PDF Export",
+    description:
+      "Download a pixel-perfect, print-ready PDF of your resume at any time — no watermarks, no paywalls.",
+  },
+  {
+    icon: Briefcase,
+    color: "emerald",
+    title: "Job-Match Analysis",
+    description:
+      "Paste a job description and get an AI-powered gap analysis showing exactly what keywords you're missing.",
+  },
+];
+
+const COLOR_MAP = {
+  indigo: {
+    bg: "bg-indigo-50",
+    border: "border-indigo-100 hover:border-indigo-300",
+    iconBg: "bg-indigo-100",
+    icon: "text-indigo-600",
+    dot: "bg-indigo-500",
+  },
+  purple: {
+    bg: "bg-purple-50",
+    border: "border-purple-100 hover:border-purple-300",
+    iconBg: "bg-purple-100",
+    icon: "text-purple-600",
+    dot: "bg-purple-500",
+  },
+  cyan: {
+    bg: "bg-cyan-50",
+    border: "border-cyan-100 hover:border-cyan-300",
+    iconBg: "bg-cyan-100",
+    icon: "text-cyan-600",
+    dot: "bg-cyan-500",
+  },
+  violet: {
+    bg: "bg-violet-50",
+    border: "border-violet-100 hover:border-violet-300",
+    iconBg: "bg-violet-100",
+    icon: "text-violet-600",
+    dot: "bg-violet-500",
+  },
+  sky: {
+    bg: "bg-sky-50",
+    border: "border-sky-100 hover:border-sky-300",
+    iconBg: "bg-sky-100",
+    icon: "text-sky-600",
+    dot: "bg-sky-500",
+  },
+  emerald: {
+    bg: "bg-emerald-50",
+    border: "border-emerald-100 hover:border-emerald-300",
+    iconBg: "bg-emerald-100",
+    icon: "text-emerald-600",
+    dot: "bg-emerald-500",
+  },
+};
 
 export default function Features() {
-  const [isHover, setIsHover] = React.useState(false);
-
   return (
-    <div id="features" className=" flex flex-col items-center scroll-mt-4">
-      <div className="flex items-center gap-2 text-sm text-green-600 bg-green-400/10  rounded-full px-6 py-1.5">
-        <svg
-          width="13"
-          height="14"
-          viewBox="0 0 13 14"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M1.613 8.2a.62.62 0 0 1-.553-.341.59.59 0 0 1 .076-.637l6.048-6.118a.31.31 0 0 1 .375-.069c.061.033.11.084.137.147a.3.3 0 0 1 .014.197L6.537 4.991a.59.59 0 0 0 .07.552.61.61 0 0 0 .504.257h4.276a.62.62 0 0 1 .553.341.59.59 0 0 1-.076.637l-6.048 6.119a.31.31 0 0 1-.375.067.295.295 0 0 1-.15-.344l1.172-3.61a.59.59 0 0 0-.07-.553.61.61 0 0 0-.504-.257z"
-            stroke="#1E4BAF"
-            strokeMiterlimit="5.759"
-            strokeLinecap="round"
-          />
-        </svg>
-        <span>Simple Process</span>
+    <section id="features" className="bg-white py-24 px-6 md:px-16 lg:px-24 scroll-mt-16">
+      {/* Section label */}
+      <div className="flex justify-center mb-4">
+        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-sm font-medium">
+          <CheckCircle className="w-3.5 h-3.5" />
+          Everything you need
+        </span>
       </div>
 
-      <Title
-        title="Build your resume"
-        description="Our streamlined process helps you create a professional resume in minutes with intelligent AI-powerd tools and features "
-      />
+      {/* Heading */}
+      <div className="text-center mb-16 max-w-2xl mx-auto">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+          Built for students,{" "}
+          <span className="bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
+            loved by recruiters
+          </span>
+        </h2>
+        <p className="text-slate-500 text-lg leading-relaxed">
+          Every feature is designed to help you land more interviews — from your
+          first internship to your dream job.
+        </p>
+      </div>
 
-      <div className="flex flex-col md:flex-row items-center  xl:mt-10 ">
-        <img
-          className="max-w-2xl w-full xl:-ml-30"
-          src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/features/group-image-1.png"
-          alt=""
-        />
-        <div
-          className="px-4 md:px-0"
-          onMouseEnter={() => setIsHover(true)}
-          onMouseLeave={() => setIsHover(false)}
-        >
-          <div
-            className={
-              "flex items-center justify-center gap-6 max-w-md group cursor-pointer"
-            }
-          >
+      {/* Feature grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        {FEATURES.map(({ icon: Icon, color, title, description }) => {
+          const c = COLOR_MAP[color];
+          return (
             <div
-              className={`p-6 group-hover:bg-violet-100 border border-transparent group-hover:border-violet-300  flex gap-4 rounded-xl transition-colors ${
-                !isHover ? "border-violet-300 bg-violet-100" : ""
-              }`}
+              key={title}
+              className={`group relative rounded-2xl border p-6 transition-all duration-200 ${c.bg} ${c.border} hover:-translate-y-1 hover:shadow-lg`}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="size-6 stroke-violet-600"
-              >
-                <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" />
-                <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" />
-              </svg>
-              <div className="space-y-2">
-                <h3 className="text-base font-semibold text-slate-700">
-                  Real-Time Analytics
-                </h3>
-                <p className="text-sm text-slate-600 max-w-xs">
-                  Get instant insights into your finances with live dashboards.
-                </p>
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${c.iconBg}`}>
+                <Icon className={`w-5 h-5 ${c.icon}`} />
               </div>
+              <h3 className="text-base font-bold text-slate-800 mb-2">{title}</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">{description}</p>
             </div>
-          </div>
-          <div className="flex items-center justify-center gap-6 max-w-md group cursor-pointer">
-            <div className="p-6 group-hover:bg-green-100 border border-transparent group-hover:border-green-300 flex gap-4 rounded-xl transition-colors">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="size-6 stroke-green-600"
-              >
-                <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" />
-              </svg>
-              <div className="space-y-2">
-                <h3 className="text-base font-semibold text-slate-700">
-                  Bank-Grade Security
-                </h3>
-                <p className="text-sm text-slate-600 max-w-xs">
-                  End-to-end encryption, 2FA, compliance with GDPR standards.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center justify-center gap-6 max-w-md group cursor-pointer">
-            <div className="p-6 group-hover:bg-orange-100 border border-transparent group-hover:border-orange-300 flex gap-4 rounded-xl transition-colors">
-              <svg
-                className="size-6 stroke-orange-600"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M12 15V3" />
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <path d="m7 10 5 5 5-5" />
-              </svg>
-              <div className="space-y-2">
-                <h3 className="text-base font-semibold text-slate-700">
-                  Customizable Reports
-                </h3>
-                <p className="text-sm text-slate-600 max-w-xs">
-                  Export professional, audit-ready financial reports for tax or
-                  internal review.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+          );
+        })}
       </div>
-      <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-            
-                * {
-                    font-family: 'Poppins', sans-serif;
-                }
-            `}</style>
-    </div>
+    </section>
   );
 }

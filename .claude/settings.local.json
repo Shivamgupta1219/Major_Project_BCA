@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"D:\\\\Ai Resume Builder [Minor proeject ]\" -Force)",
+      "Bash(Select-Object Name, Mode)",
+      "Bash(Format-Table -AutoSize)",
+      "Bash(npm run *)",
+      "Bash(timeout 10 node index.js)",
+      "Bash(node --check models/User.js)",
+      "Bash(node --check models/College.js)",
+      "Bash(node --check models/Department.js)",
+      "Bash(node --check models/Resume.js)",
+      "Bash(node --check middlewares/authMiddleware.js)",
+      "Bash(timeout 5 node server.js)",
+      "Bash(npm install *)"
+    ]
+  }
+}

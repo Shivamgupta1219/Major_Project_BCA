@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import { useSelector } from "react-redux";
 import Loader from "../Components/Loader";
@@ -12,16 +12,15 @@ export default function Layout() {
     return <Loader />;
   }
 
+  if (!user) return <Login />;
+  if (user.role === "super_admin") return <Navigate to="/super-admin" replace />;
+  if (user.role === "admin") return <Navigate to="/admin" replace />;
+  if (user.role === "faculty") return <Navigate to="/faculty" replace />;
+
   return (
-    <div>
-      {user ? (
-        <div className="min-h-screen bg-gray-50">
-          <Navbar />
-          <Outlet />
-        </div>
-      ) : (
-        <Login />
-      )}
+    <div className="min-h-screen bg-gray-50">
+      <Navbar />
+      <Outlet />
     </div>
   );
 }

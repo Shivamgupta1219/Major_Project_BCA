@@ -1,17 +1,24 @@
-import Banner from "../Components/Home/Banner";
-import CallToAction from "../Components/Home/CallToAction";
-import Features from "../Components/Home/Features";
-import Footer from "../Components/Home/Footer";
-import Hero from "../Components/Home/Hero";
+import Hero         from "../Components/Home/Hero";
+import HowItWorks   from "../Components/Home/HowItWorks";
+import Features     from "../Components/Home/Features";
 import Testimonials from "../Components/Home/Testimonials";
+import CallToAction from "../Components/Home/CallToAction";
+import Footer       from "../Components/Home/Footer";
 
 export default function Home() {
   return (
-    <div>
-      {/* <Banner /> */}
+    <div className="bg-slate-950">
+      {/* Dark sections */}
       <Hero />
-      <Features />
-      <Testimonials />
+      <HowItWorks />
+
+      {/* Light sections */}
+      <div className="bg-white">
+        <Features />
+        <Testimonials />
+      </div>
+
+      {/* Dark closing */}
       <CallToAction />
       <Footer />
     </div>
