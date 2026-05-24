@@ -1,24 +1,35 @@
 # Environment files
 .env
-client/.env
+.env.local
+.env.*.local
 Server/.env
+Server/.env.local
+client/.env
+client/.env.local
 
 # Node modules
 node_modules
 client/node_modules
 Server/node_modules
+package-lock.json
+yarn.lock
 
 # Build folders
 dist
 build
+client/dist
+Server/dist
 
-# Logs
-*.log
-
-# OS files
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+*~
 .DS_Store
 Thumbs.db
-
+*.sublime-project
+*.sublime-workspace
 
 # Logs
 logs
@@ -29,19 +40,61 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Project specific
+.claude
 node_modules
-dist
 dist-ssr
 *.local
+
+# Testing
+coverage
+.nyc_output
+
+# Vercel
+.vercel
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-.claude
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# MacOS
+.AppleDouble
+.LSOverride
+
+
+# Documentation files (already read once)
+ALL_FIXES_APPLIED.md
+BULK_UPLOAD_AND_SUBSCRIPTIONS_GUIDE.md
+CHANGES_APPLIED.md
+CODE_REVIEW_AND_BUG_FIXES.md
+COLLEGE_ADMIN_PASSWORD_CHANGE.md
+COLLEGE_ADMIN_SETUP_FLOW.md
+COLLEGE_ADMIN_SETUP_GUIDE.md
+COLLEGE_SETUP_WORKFLOW.md
+FINAL_FIXES_SUMMARY.md
+FIXES_SUMMARY.md
+FIX_AND_TEST_NOW.md
+QUICK_START.md
+QUICK_START_GUIDE.md
+RESTART_AND_TEST.md
+SOLUTION_SUMMARY.md
+SUBSCRIPTION_ERROR_FIXED.md
+TESTING_GUIDE.md
+TESTING_VALIDATION_GUIDE.md
+TEST_NEW_ADMIN_SETUP.md
