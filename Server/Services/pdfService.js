@@ -8,13 +8,11 @@
 // };
 
 import { createRequire } from "module";
-import fs from "fs";
 
 const require = createRequire(import.meta.url);
 const pdfParse = require("pdf-parse");
 
-export const extractTextFromPDF = async (filePath) => {
-  const buffer = fs.readFileSync(filePath);
-  const data = await pdfParse(buffer);
+export const extractTextFromPDF = async (fileBuffer) => {
+  const data = await pdfParse(fileBuffer);
   return data.text;
 };

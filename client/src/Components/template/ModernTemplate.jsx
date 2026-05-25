@@ -8,18 +8,18 @@ const ModernTemplate = ({ data, accentColor }) => {
   const accent = accentColor || "#6366f1";
 
   return (
-    <div className="w-full bg-white font-sans text-[13px] text-gray-800 leading-relaxed">
+    <div className="w-full bg-white font-sans text-[12px] text-gray-800 leading-tight">
       {/* ── HEADER ── */}
-      <header className="px-8 pt-8 pb-6" style={{ borderBottom: `4px solid ${accent}` }}>
-        <h1 className="text-3xl font-bold text-gray-900 mb-1">
+      <header className="px-6 pt-5 pb-4" style={{ borderBottom: `4px solid ${accent}` }}>
+        <h1 className="text-2xl font-bold text-gray-900 mb-1">
           {data.personal_info?.full_name || "Your Name"}
         </h1>
         {data.personal_info?.profession && (
-          <p className="text-base font-medium mb-3" style={{ color: accent }}>
+          <p className="text-sm font-medium mb-2" style={{ color: accent }}>
             {data.personal_info.profession}
           </p>
         )}
-        <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-gray-600">
+        <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-gray-600">
           {data.personal_info?.email    && <span>✉ {data.personal_info.email}</span>}
           {data.personal_info?.phone    && <span>✆ {data.personal_info.phone}</span>}
           {data.personal_info?.location && <span>⌖ {data.personal_info.location}</span>}
@@ -29,7 +29,7 @@ const ModernTemplate = ({ data, accentColor }) => {
         </div>
       </header>
 
-      <div className="px-8 py-6 space-y-6">
+      <div className="px-6 py-4 space-y-4">
         {/* ── SUMMARY ── */}
         {data.professional_summary && (
           <section>

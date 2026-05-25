@@ -2,11 +2,12 @@ import React from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../app/Feautes/authSlice";
-import { BarChart3, Users, CheckCircle, LogOut, Sparkles } from "lucide-react";
+import { BarChart3, Users, CheckCircle, LogOut, Sparkles, Briefcase } from "lucide-react";
 
 const navItems = [
   { to: "/faculty", label: "Dashboard", icon: BarChart3, end: true },
   { to: "/faculty/reviews", label: "Reviews", icon: CheckCircle },
+  { to: "/faculty/placement-drives", label: "Placement Drives", icon: Briefcase },
   { to: "/faculty/students", label: "Students", icon: Users },
 ];
 

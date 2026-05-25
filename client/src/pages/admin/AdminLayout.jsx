@@ -11,11 +11,13 @@ import {
   Sparkles,
   Settings,
   CreditCard,
+  Briefcase,
 } from "lucide-react";
 
 const navItems = [
   { to: "/admin", label: "Dashboard", icon: BarChart3, end: true },
   { to: "/admin/students", label: "Students", icon: Users },
+  { to: "/admin/placement-drives", label: "Placement Drives", icon: Briefcase },
   { to: "/admin/skill-gap", label: "Skill Gap", icon: Target },
   { to: "/admin/bulk-upload", label: "Bulk Upload", icon: Upload },
   { to: "/admin/subscription", label: "Subscription", icon: CreditCard },

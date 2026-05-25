@@ -7,9 +7,11 @@ const router = express.Router();
 
 router.post("/resume", upload.single("file"), async (req, res) => {
   try {
-    const filePath = req.file.path;
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
 
-    const text = await extractTextFromPDF(filePath);
+    const text = await extractTextFromPDF(req.file.buffer);
 
     res.json({
       success: true,
@@ -17,6 +19,7 @@ router.post("/resume", upload.single("file"), async (req, res) => {
     });
 
   } catch (err) {
+    console.error("PDF parsing error:", err);
     res.status(500).json({ error: "PDF parsing failed" });
   }
 });

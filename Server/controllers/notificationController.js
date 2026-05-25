@@ -36,6 +36,33 @@ export const markAllAsRead = async (req, res) => {
   }
 };
 
+export const deleteNotification = async (req, res) => {
+  try {
+    const { notificationId } = req.params;
+    const result = await Notification.findOneAndDelete({
+      _id: notificationId,
+      userId: req.userId,
+    });
+
+    if (!result) {
+      return res.status(404).json({ message: "Notification not found" });
+    }
+
+    res.json({ message: "Notification deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to delete notification" });
+  }
+};
+
+export const deleteAllNotifications = async (req, res) => {
+  try {
+    await Notification.deleteMany({ userId: req.userId });
+    res.json({ message: "All notifications deleted" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to delete notifications" });
+  }
+};
+
 export const createNotification = async (userId, type, title, message, actionUrl = null, metadata = null) => {
   try {
     const notification = new Notification({

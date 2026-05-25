@@ -19,9 +19,16 @@ configDotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// routes
+// CORS configuration - must be before routes
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+// Body parser middleware
 app.use(express.json());
-app.use(cors());
 app.get("/", (req, res) => {
   res.send("API Running");
 });
