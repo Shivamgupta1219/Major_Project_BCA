@@ -36,6 +36,11 @@ import FacultyDashboard from "./pages/faculty/FacultyDashboard";
 import ReviewResumes from "./pages/faculty/ReviewResumes";
 import ReviewDetail from "./pages/faculty/ReviewDetail";
 import Students from "./pages/faculty/Students";
+import FacultyPlacementDrives from "./pages/faculty/PlacementDrives";
+import PlacementDriveForm from "./pages/faculty/PlacementDriveForm";
+import PlacementDriveDetail from "./pages/faculty/PlacementDriveDetail";
+import AdminPlacementDrives from "./pages/admin/AdminPlacementDrives";
+import AdminPlacementDriveDetail from "./pages/admin/AdminPlacementDriveDetail";
 import CoverLetterGenerator from "./pages/advanced-ai/CoverLetterGenerator";
 import LinkedInOptimizer from "./pages/advanced-ai/LinkedInOptimizer";
 import InterviewPrep from "./pages/advanced-ai/InterviewPrep";
@@ -129,6 +134,10 @@ export default function App() {
         >
           <Route index element={<AdminDashboard />} />
           <Route path="students" element={<AdminStudents />} />
+          <Route path="placement-drives" element={<AdminPlacementDrives />} />
+          <Route path="placement-drives/create" element={<PlacementDriveForm />} />
+          <Route path="placement-drives/edit/:driveId" element={<PlacementDriveForm />} />
+          <Route path="placement-drives/:driveId" element={<AdminPlacementDriveDetail />} />
           <Route path="skill-gap" element={<AdminSkillGap />} />
           <Route path="bulk-upload" element={<AdminBulkUpload />} />
           <Route path="subscription" element={<AdminSubscription />} />
@@ -147,6 +156,10 @@ export default function App() {
           <Route path="reviews" element={<ReviewResumes />} />
           <Route path="reviews/:reviewId" element={<ReviewDetail />} />
           <Route path="students" element={<Students />} />
+          <Route path="placement-drives" element={<FacultyPlacementDrives />} />
+          <Route path="placement-drives/create" element={<PlacementDriveForm />} />
+          <Route path="placement-drives/edit/:driveId" element={<PlacementDriveForm />} />
+          <Route path="placement-drives/:driveId" element={<PlacementDriveDetail />} />
         </Route>
 
         <Route path="/view/:resumeId" element={<Preview />} />

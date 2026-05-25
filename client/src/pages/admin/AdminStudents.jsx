@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import api from "../../configs/api";
-import { Search, Download, LoaderCircle, Trash2, AlertCircle } from "lucide-react";
+import { Search, Download, LoaderCircle, Trash2, AlertCircle, Eye, FileText } from "lucide-react";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const ScoreChip = ({ score }) => {
   if (!score) {
@@ -78,6 +79,13 @@ export default function AdminStudents() {
     studentId: null,
     studentName: null,
     isLoading: false,
+  });
+  const [resumeModal, setResumeModal] = useState({
+    isOpen: false,
+    studentId: null,
+    studentName: null,
+    resumes: [],
+    loading: false,
   });
 
   const fetchStudents = async () => {
@@ -164,6 +172,41 @@ export default function AdminStudents() {
       studentId: null,
       studentName: null,
       isLoading: false,
+    });
+  };
+
+  const openResumeModal = async (studentId, studentName) => {
+    setResumeModal({
+      isOpen: true,
+      studentId,
+      studentName,
+      resumes: [],
+      loading: true,
+    });
+
+    try {
+      const { data } = await api.get(`/api/admin/students/${studentId}/resumes`);
+      setResumeModal((prev) => ({
+        ...prev,
+        resumes: data.resumes || [],
+        loading: false,
+      }));
+    } catch (err) {
+      toast.error("Failed to load resumes");
+      setResumeModal((prev) => ({
+        ...prev,
+        loading: false,
+      }));
+    }
+  };
+
+  const closeResumeModal = () => {
+    setResumeModal({
+      isOpen: false,
+      studentId: null,
+      studentName: null,
+      resumes: [],
+      loading: false,
     });
   };
 
@@ -374,7 +417,14 @@ export default function AdminStudents() {
                         <span className="text-slate-400 text-xs">— Pending</span>
                       )}
                     </td>
-                    <td className="px-6 py-3">
+                    <td className="px-6 py-3 flex gap-2">
+                      <button
+                        onClick={() => openResumeModal(s._id, s.name)}
+                        className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 p-2 rounded inline-flex"
+                        title="View resumes"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
                       <button
                         onClick={() => openDeleteModal("single", s._id, s.name)}
                         className="text-red-600 hover:text-red-700 hover:bg-red-50 p-2 rounded inline-flex"
@@ -390,6 +440,80 @@ export default function AdminStudents() {
           </div>
         )}
       </div>
+
+      {/* Resume Modal */}
+      {resumeModal.isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-2xl w-full shadow-xl max-h-96 flex flex-col">
+            <div className="p-6 border-b border-slate-200">
+              <h2 className="font-semibold text-slate-900">
+                Resumes - {resumeModal.studentName}
+              </h2>
+            </div>
+            <div className="flex-1 overflow-y-auto p-6">
+              {resumeModal.loading ? (
+                <div className="flex justify-center py-8">
+                  <LoaderCircle className="w-6 h-6 animate-spin text-indigo-600" />
+                </div>
+              ) : resumeModal.resumes.length === 0 ? (
+                <div className="text-center py-8 text-slate-600">
+                  <FileText className="w-12 h-12 text-slate-300 mx-auto mb-2" />
+                  <p>No resumes found</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {resumeModal.resumes.map((resume) => {
+                    const statusConfig = {
+                      pending: { label: "Pending", color: "bg-yellow-100 text-yellow-700" },
+                      approved: { label: "Approved", color: "bg-green-100 text-green-700" },
+                      rejected: { label: "Rejected", color: "bg-red-100 text-red-700" },
+                      needs_improvement: { label: "Needs Improvement", color: "bg-orange-100 text-orange-700" },
+                    };
+                    const status = statusConfig[resume.feedbackStatus] || null;
+
+                    return (
+                      <Link
+                        key={resume._id}
+                        to={`/view/${resume._id}`}
+                        target="_blank"
+                        className="flex items-center justify-between p-4 border border-slate-200 rounded-lg hover:bg-indigo-50 hover:border-indigo-300 transition-colors group"
+                      >
+                        <div className="flex items-center gap-3 flex-1">
+                          <FileText className="w-5 h-5 text-indigo-600" />
+                          <div className="flex-1">
+                            <p className="font-medium text-slate-900 group-hover:text-indigo-700">
+                              {resume.title}
+                            </p>
+                            <div className="flex items-center gap-2 mt-1">
+                              <p className="text-xs text-slate-500">
+                                Score: {resume.resumeScore?.overall || "Not scored"}
+                              </p>
+                              {status && (
+                                <span className={`text-xs font-medium px-2 py-1 rounded ${status.color}`}>
+                                  {status.label}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <Eye className="w-4 h-4 text-slate-400 group-hover:text-indigo-600 flex-shrink-0" />
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+            <div className="p-4 border-t border-slate-200 flex justify-end">
+              <button
+                onClick={closeResumeModal}
+                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium text-sm"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Delete Confirmation Modal */}
       <DeleteConfirmModal

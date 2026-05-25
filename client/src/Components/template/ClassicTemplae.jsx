@@ -7,7 +7,7 @@ const ClassicTemplate = ({ data, accentColor }) => {
 
   const SectionHeading = ({ children }) => (
     <h2
-      className="text-xs font-bold uppercase tracking-widest mb-3 pb-1 border-b-2"
+      className="text-xs font-bold uppercase tracking-widest mb-2 pb-1 border-b-2"
       style={{ color: accentColor, borderColor: accentColor }}
     >
       {children}
@@ -15,10 +15,10 @@ const ClassicTemplate = ({ data, accentColor }) => {
   );
 
   return (
-    <div className="w-full bg-white p-8 text-gray-800 text-[13px] leading-relaxed font-sans">
+    <div className="w-full bg-white p-5 text-gray-800 text-[12px] leading-tight font-sans">
       {/* ── HEADER ── */}
-      <header className="text-center mb-6">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900 mb-1">
+      <header className="text-center mb-3">
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 mb-1">
           {data.personal_info?.full_name || "Your Name"}
         </h1>
         {data.personal_info?.profession && (
@@ -38,17 +38,17 @@ const ClassicTemplate = ({ data, accentColor }) => {
 
       {/* ── SUMMARY ── */}
       {data.professional_summary && (
-        <section className="mb-5">
+        <section className="mb-3">
           <SectionHeading>Professional Summary</SectionHeading>
-          <p className="text-gray-700 leading-relaxed">{data.professional_summary}</p>
+          <p className="text-gray-700">{data.professional_summary}</p>
         </section>
       )}
 
       {/* ── EXPERIENCE ── */}
       {data.experience?.length > 0 && (
-        <section className="mb-5">
+        <section className="mb-3">
           <SectionHeading>{data.section_titles?.experience || "Work Experience"}</SectionHeading>
-          <div className="space-y-4">
+          <div className="space-y-2">
             {data.experience.map((exp, i) => (
               <div key={i}>
                 <div className="flex justify-between items-baseline">
@@ -75,18 +75,18 @@ const ClassicTemplate = ({ data, accentColor }) => {
 
       {/* ── PROJECTS ── */}
       {data.project?.length > 0 && (
-        <section className="mb-5">
+        <section className="mb-3">
           <SectionHeading>Projects</SectionHeading>
-          <div className="space-y-3">
+          <div className="space-y-2">
             {data.project.map((proj, i) => (
               <div key={i}>
                 <div className="flex justify-between items-baseline">
                   <span className="font-semibold text-gray-900">{proj.name}</span>
                   {proj.type && <span className="text-xs text-gray-500">{proj.type}</span>}
                 </div>
-                {proj.description && <p className="text-gray-700 mt-0.5">{proj.description}</p>}
+                {proj.description && <p className="text-gray-700 mt-0">{proj.description}</p>}
                 {proj.technologies?.length > 0 && (
-                  <p className="text-xs text-gray-500 mt-0.5">
+                  <p className="text-xs text-gray-500 mt-0">
                     Technologies: {proj.technologies.join(", ")}
                   </p>
                 )}
@@ -98,9 +98,9 @@ const ClassicTemplate = ({ data, accentColor }) => {
 
       {/* ── EDUCATION ── */}
       {data.education?.length > 0 && (
-        <section className="mb-5">
+        <section className="mb-3">
           <SectionHeading>Education</SectionHeading>
-          <div className="space-y-3">
+          <div className="space-y-2">
             {data.education.map((edu, i) => (
               <div key={i} className="flex justify-between items-baseline">
                 <div>
@@ -121,7 +121,7 @@ const ClassicTemplate = ({ data, accentColor }) => {
 
       {/* ── SKILLS ── */}
       {data.skills?.length > 0 && (
-        <section className="mb-5">
+        <section className="mb-3">
           <SectionHeading>Skills</SectionHeading>
           <p className="text-gray-700">{data.skills.join(" • ")}</p>
         </section>
@@ -129,9 +129,9 @@ const ClassicTemplate = ({ data, accentColor }) => {
 
       {/* ── CERTIFICATIONS ── */}
       {data.certifications?.length > 0 && (
-        <section className="mb-5">
+        <section className="mb-3">
           <SectionHeading>Certifications</SectionHeading>
-          <div className="space-y-2">
+          <div className="space-y-1">
             {data.certifications.map((cert, i) => (
               <div key={i} className="flex justify-between items-start">
                 <div>

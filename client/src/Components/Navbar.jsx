@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { logout } from "../app/Feautes/authSlice";
 import api from "../configs/api";
 import {
@@ -26,6 +27,7 @@ function Navbar() {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isLoadingNotif, setIsLoadingNotif] = useState(false);
+  const [confirmDeleteAll, setConfirmDeleteAll] = useState(false);
   const dropdownRef = useRef(null);
   const notifRef = useRef(null);
 
@@ -62,6 +64,44 @@ function Navbar() {
     }
   };
 
+  // Delete notification
+  const deleteNotification = async (notificationId, e) => {
+    e.stopPropagation();
+    try {
+      await api.delete(`/api/notifications/${notificationId}`);
+      setNotifications((prev) => prev.filter((n) => n._id !== notificationId));
+      setUnreadCount((prev) => {
+        const notif = notifications.find((n) => n._id === notificationId);
+        return notif && !notif.read ? Math.max(0, prev - 1) : prev;
+      });
+      toast.success("Notification deleted", { autoClose: 2000 });
+    } catch (error) {
+      console.error("Failed to delete notification:", error);
+      toast.error("Failed to delete notification");
+    }
+  };
+
+  // Delete all notifications
+  const deleteAllNotifications = async () => {
+    if (!confirmDeleteAll) {
+      setConfirmDeleteAll(true);
+      toast.warning("Click again to confirm clearing all notifications", { autoClose: 3000 });
+      return;
+    }
+
+    try {
+      await api.delete("/api/notifications");
+      setNotifications([]);
+      setUnreadCount(0);
+      setConfirmDeleteAll(false);
+      toast.success("All notifications cleared", { autoClose: 2000 });
+    } catch (error) {
+      console.error("Failed to delete all notifications:", error);
+      toast.error("Failed to clear notifications");
+      setConfirmDeleteAll(false);
+    }
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -80,6 +120,13 @@ function Navbar() {
   useEffect(() => {
     if (showNotifications && notifications.length === 0) {
       fetchNotifications();
+    }
+  }, [showNotifications]);
+
+  // Reset confirmation state when dropdown closes
+  useEffect(() => {
+    if (!showNotifications) {
+      setConfirmDeleteAll(false);
     }
   }, [showNotifications]);
 
@@ -238,9 +285,18 @@ function Navbar() {
                               {formatTime(notif.createdAt)}
                             </p>
                           </div>
-                          {!notif.read && (
-                            <div className="w-2 h-2 bg-indigo-600 rounded-full flex-shrink-0 mt-1.5"></div>
-                          )}
+                          <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+                            {!notif.read && (
+                              <div className="w-2 h-2 bg-indigo-600 rounded-full mt-1.5"></div>
+                            )}
+                            <button
+                              onClick={(e) => deleteNotification(notif._id, e)}
+                              className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-red-50 rounded text-slate-400 hover:text-red-600 flex-shrink-0"
+                              title="Delete notification"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))
@@ -249,9 +305,22 @@ function Navbar() {
 
                 {/* Footer */}
                 {notifications.length > 0 && (
-                  <div className="p-3 border-t border-slate-100 text-center flex-shrink-0 bg-slate-50">
-                    <button className="text-sm text-indigo-600 hover:text-indigo-700 font-medium transition-colors">
-                      View all notifications
+                  <div className="p-3 border-t border-slate-100 flex-shrink-0 bg-slate-50 flex gap-2">
+                    <button className="flex-1 text-sm text-indigo-600 hover:text-indigo-700 font-medium transition-colors">
+                      View all
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteAllNotifications();
+                      }}
+                      className={`text-sm font-medium transition-colors ${
+                        confirmDeleteAll
+                          ? "text-red-700 bg-red-50 px-2 py-1 rounded"
+                          : "text-red-600 hover:text-red-700"
+                      }`}
+                    >
+                      {confirmDeleteAll ? "Confirm?" : "Clear all"}
                     </button>
                   </div>
                 )}

@@ -404,6 +404,50 @@ export const createDepartment = async (req, res) => {
   }
 };
 
+// GET /api/admin/students/:studentId/resumes - get student's resumes
+export const getStudentResumes = async (req, res) => {
+  try {
+    const { studentId } = req.params;
+    const AdminFeedback = (await import("../models/AdminFeedback.js")).default;
+
+    // Verify the student belongs to the admin's college
+    const student = await User.findById(studentId);
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    // Ensure college isolation
+    if (String(student.collegeId) !== String(req.user.collegeId)) {
+      return res.status(403).json({ message: "Not authorized to view this student's resumes" });
+    }
+
+    // Get all resumes for this student
+    const resumes = await Resume.find({ userId: studentId })
+      .select("_id title resumeScore createdAt updatedAt")
+      .sort({ createdAt: -1 });
+
+    // Get feedback for each resume
+    const resumeIds = resumes.map(r => r._id);
+    const feedbacks = await AdminFeedback.find({ resumeId: { $in: resumeIds } })
+      .select("resumeId status");
+
+    const feedbackMap = {};
+    feedbacks.forEach(f => {
+      feedbackMap[String(f.resumeId)] = f.status;
+    });
+
+    // Add feedback status to each resume
+    const enriched = resumes.map(r => ({
+      ...r.toObject(),
+      feedbackStatus: feedbackMap[String(r._id)] || null
+    }));
+
+    res.json({ resumes: enriched });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 // DELETE /api/admin/students/:id - delete single student
 export const deleteStudent = async (req, res) => {
   try {

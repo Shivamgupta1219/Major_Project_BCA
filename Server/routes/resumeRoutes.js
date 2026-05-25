@@ -7,6 +7,9 @@ import {
   deleteResume,
   getUserResumes,
   computeResumeScore,
+  getAdminFeedback,
+  submitAdminFeedback,
+  markResumeImproved,
 } from "../controllers/resumeController.js";
 import upload from "../configs/multer.js";
 import protect from "../middlewares/authMiddleware.js";
@@ -62,5 +65,12 @@ resumeRouter.post("/:resumeId/submit-review", protect, async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+// ADMIN FEEDBACK
+resumeRouter.get("/:resumeId/admin-feedback", protect, getAdminFeedback);
+resumeRouter.post("/:resumeId/admin-feedback", protect, submitAdminFeedback);
+
+// MARK RESUME AS IMPROVED
+resumeRouter.post("/:resumeId/mark-improved", protect, markResumeImproved);
 
 export default resumeRouter;

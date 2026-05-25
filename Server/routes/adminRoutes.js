@@ -8,6 +8,7 @@ import {
   exportStudentsCsv,
   deleteStudent,
   deleteStudentsBulk,
+  getStudentResumes,
   listColleges,
   createCollege,
   listDepartments,
@@ -33,5 +34,6 @@ adminRouter.get("/departments", listDepartments);
 adminRouter.post("/departments", createDepartment);
 adminRouter.get("/me", getAdminContext);
 adminRouter.put("/me/link-college", linkCollegeToAdmin);
+adminRouter.get("/students/:studentId/resumes", getStudentResumes);
 
 export default adminRouter;
